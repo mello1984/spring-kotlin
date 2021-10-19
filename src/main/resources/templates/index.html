@@ -20,6 +20,19 @@
         </div>
     </div>
 
+    <div class="form-row col-4">
+        <form method="get" action="" th:action="@{/}">
+            <div class="input-group mb-3">
+                <input name="cats_name" type="search" class="form-control" placeholder="Cat's name" aria-label="Cat's name" aria-describedby="button-name"
+                       th:value="${key}">
+                <button class="btn btn-outline-secondary" type="submit" id="button-name">Search</button>
+                <a class="btn btn-outline-secondary" data-bs-toggle="offcanvas" href="/" role="button" aria-controls="offcanvasExample">Clear</a>
+            </div>
+        </form>
+
+
+    </div>
+
     <div class="row mt-4">
         <table class="table table-striped table-hover">
             <thead>
