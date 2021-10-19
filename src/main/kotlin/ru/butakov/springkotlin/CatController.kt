@@ -1,5 +1,7 @@
 package ru.butakov.springkotlin
 
+import org.springframework.data.domain.Page
+import org.springframework.data.domain.PageRequest
 import org.springframework.http.HttpStatus
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -12,9 +14,18 @@ import org.springframework.web.server.ResponseStatusException
 class CatController(val repository: CatRepository) {
 
     @GetMapping("/")
-    fun index1(model: Model, @RequestParam("cats_name", required = false, defaultValue = "") name: String): String {
-        model.addAttribute("cats", if (name == "") repository.findAll() else repository.findByName(name))
+    fun index(
+        model: Model,
+        @RequestParam("cats_name", required = false, defaultValue = "") name: String,
+        @RequestParam("page", required = false, defaultValue = "1") page: Int,
+        @RequestParam("size", required = false, defaultValue = "3") size: Int,
+        ): String {
+        val p = if (name == "") getAllByPage(page, size) else getByNameByPage(name, page, size)
         model.addAttribute("key", if (name == "") "" else name)
+        model.addAttribute("cats", p)
+        model.addAttribute("pag", p)
+        model.addAttribute("pageNumber", p.pageable.pageNumber)
+        model.addAttribute("totalPages", p.totalPages)
         return "index"
     }
 
@@ -25,5 +36,13 @@ class CatController(val repository: CatRepository) {
         return "edit"
     }
 
+    fun getAllByPage(page: Int, size: Int): Page<Cat> {
+        val request: PageRequest = PageRequest.of(page, size)
+        return repository.findAll(request)
+    }
 
+    fun getByNameByPage(name: String, page: Int, size: Int): Page<Cat> {
+        val request: PageRequest = PageRequest.of(page, size)
+        return repository.findByName(name, request)
+    }
 }

@@ -9,3 +9,5 @@ class SpringKotlinApplication
 fun main(args: Array<String>) {
     runApplication<SpringKotlinApplication>(*args)
 }
+
+// Нужно дописать правильные ссылки на pageable при фильтрации по имени
